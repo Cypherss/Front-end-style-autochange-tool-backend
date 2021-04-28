@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.DAO.UserMapper">
+
+    <insert id="addUser" parameterType="com.example.demo.PO.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(name,password) values (#{name},#{password})
+    </insert>
+
+    <insert id="addFile" parameterType="com.example.demo.PO.SourceFile">
+        insert into sourcefile(id,name,uploadTime,type,creatorId) values (#{id}, #{name},#{uploadTime},#{type},#{creatorId})
+    </insert>
+
+    <insert id="addGroup" parameterType="com.example.demo.PO.Group" useGeneratedKeys="true" keyProperty="id">
+        insert into `group`(name,description) values (#{name},#{description})
+    </insert>
+
+    <select id="getUser" parameterType="com.example.demo.PO.User" resultMap="User">
+        select * from user where name=#{name} and password = #{password}
+    </select>
+
+    <insert id="addUserFile">
+        insert into user_file(userId,fileId) values (#{userId},#{fileId})
+    </insert>
+
+    <insert id="addGroupMember">
+        insert into user_group(userId,groupId) values (#{userId},#{groupId})
+    </insert>
+
+    <insert id="addGroupFile">
+        insert into group_file(groupId,fileId) values (#{groupId},#{fileId})
+    </insert>
+
+    <select id="getGroupsByUserId" resultMap="Group">
+        select `group`.id id, `group`.name name, `group`.description description
+        from user_group, `group`
+        where user_group.userId = #{userId} and user_group.groupId = `group`.id
+    </select>
+
+    <select id="getUsersByGroupId" resultMap="User">
+        select user.id id, user.name name, user.password password
+        from user_group, user
+        where user_group.groupId = #{groupId} and user_group.userId = user.id
+    </select>
+
+    <select id="getSourceFilesByUserId" resultMap="SourceFile">
+        select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
+        from sourcefile, user_file
+        where user_file.userId = #{userId} and sourcefile.id = user_file.fileId
+    </select>
+
+    <select id="getSourceFilesByGroupId" resultMap="SourceFile">
+        select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
+        from sourcefile, group_file
+        where group_file.groupId = #{groupId} and sourcefile.id = group_file.fileId
+    </select>
+
+    <resultMap id="User" type="com.example.demo.PO.User">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="password" property="password"></result>
+    </resultMap>
+
+    <resultMap id="SourceFile" type="com.example.demo.PO.SourceFile">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="uploadTime" property="uploadTime"></result>
+        <result column="type" property="type"></result>
+        <result column="creatorId" property="creatorId"></result>
+    </resultMap>
+
+    <resultMap id="Group" type="com.example.demo.PO.Group">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="description" property="description"></result>
+    </resultMap>
+</mapper>

@@ -1,0 +1,26 @@
+# 应用名称
+spring:
+  application:
+    name: user
+  datasource:
+    url: jdbc:mysql://localhost:3306/stylereplace?serverTimezone=CTT&characterEncoding=UTF-8&interactiveClient=true&autoReconnect=true&useSSL=false
+    username: root
+    password: zcy1998917
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    max-active: 200
+    max-idle: 20
+    min-idle: 10
+
+# 应用服务 WEB 访问端口
+server:
+  port: 9000
+
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://127.0.0.1:8089/eureka/
+
+mybatis:
+  mapper-locations: classpath:daoImpl/*Mapper.xml
+
+

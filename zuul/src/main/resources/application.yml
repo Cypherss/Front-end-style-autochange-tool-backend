@@ -1,0 +1,15 @@
+# 应用名称
+spring:
+  application:
+    name: zuul
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+
+eureka:
+  client:
+    register-with-eureka: false
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://127.0.0.1:8089/eureka/
+
+
