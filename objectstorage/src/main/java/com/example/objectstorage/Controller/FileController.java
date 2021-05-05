@@ -52,6 +52,9 @@ public class FileController {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             // 设置存储对象名称
             String objectName = sdf.format(new Date()) + "-" + filename;
+            if(minioClient.getObject(type,objectName)!=null){
+                return objectName;
+            }
             // 使用putObject上传一个文件到存储桶中
             minioClient.putObject(type, objectName, file.getInputStream(), file.getContentType());
             return objectName;
