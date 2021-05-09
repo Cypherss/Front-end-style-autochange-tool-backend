@@ -39,7 +39,7 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose(Session session) {
-        LOGGER.info("有一连接关闭：{}，当前在线人数为：{}", session.getId());
+        LOGGER.info("有一连接关闭：{}", session.getId());
     }
 
     /**
@@ -55,12 +55,10 @@ public class WebSocketServer {
             //match and replace
             //todo
             this.sendMessage("25%",session);
+
             //optimize
             //todo
             this.sendMessage("50%",session);
-            //estimate
-            //todo
-            this.sendMessage("75%",session);
 
             this.sendMessage("end",session);
 
@@ -73,7 +71,6 @@ public class WebSocketServer {
     @OnError
     public void onError(Session session, Throwable error) {
         LOGGER.error("发生错误");
-        error.printStackTrace();
     }
 
     /**
