@@ -36,6 +36,30 @@ public class CoreController {
     @RequestMapping(value = "/source", method = RequestMethod.POST)
     public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
         try {
+            String fileId = fileSave(file, type);
+            String uploadTime = fileId.split("-")[0];
+            Boolean res = restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,file.getOriginalFilename(),uploadTime,type);
+            return ResponseVO.buildSuccess(res);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return ResponseVO.buildFailure("error");
+    }
+
+    @RequestMapping(value = "/target", method = RequestMethod.POST)
+    public ResponseVO targetUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
+        try {
+            String fileId = fileSave(file,type);
+            // history ???
+            return ResponseVO.buildSuccess(fileId);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return ResponseVO.buildFailure("error");
+    }
+
+    public String fileSave(MultipartFile file,String type){
+        try {
             //设置请求头
             HttpHeaders headers = new HttpHeaders();
             MediaType paramType = MediaType.parseMediaType("multipart/form-data");
@@ -58,13 +82,11 @@ public class CoreController {
             HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
 
             String fileId = restTemplate.postForObject(STORAGE_HEADER+"/upload", files, String.class);
-            String uploadTime = fileId.split("-")[0];
-            Boolean res = restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,file.getOriginalFilename(),uploadTime,type);
-            return ResponseVO.buildSuccess(res);
+            return fileId;
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
-        return ResponseVO.buildFailure("error");
+        return "error";
     }
 
     @RequestMapping(value = "/content", method = RequestMethod.GET)
