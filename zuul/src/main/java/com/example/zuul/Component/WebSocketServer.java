@@ -54,11 +54,11 @@ public class WebSocketServer {
         try {
             //match and replace
             //todo
-            this.sendMessage("25%",session);
+            this.sendMessage("50%",session);
 
             //optimize
             //todo
-            this.sendMessage("50%",session);
+            this.sendMessage("75%",session);
 
             this.sendMessage("end",session);
 
