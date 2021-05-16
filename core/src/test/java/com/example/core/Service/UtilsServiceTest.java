@@ -16,7 +16,7 @@ import java.io.File;
 public class UtilsServiceTest {
     @Test
     public void generateHtmlTest(){
-        File file = new File("src/test/resources/content.json");
+        File file = new File("src/test/resources/content3.json");
         try{
             String content = FileUtils.readFileToString(file);
             UtilService utilService = new UtilServiceImpl();

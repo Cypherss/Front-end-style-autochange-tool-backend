@@ -23,11 +23,11 @@ public class UtilServiceImpl implements UtilService {
      */
     public String generateHTML(String json){
         JSONObject jsonObject = JSON.parseObject(json);
-        String htmlBody = rebuildHTML(jsonObject);
+        String htmlBody = htmlBuilder(jsonObject);
         return "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlBody + "</html>";
     }
 
-    public String rebuildHTML(JSONObject jsonObject){
+    public String htmlBuilder(JSONObject jsonObject){
         if(jsonObject==null){
             return "";
         }
@@ -41,19 +41,27 @@ public class UtilServiceImpl implements UtilService {
         if(jsonObject.containsKey("children")){
             JSONArray subJsonObjects = jsonObject.getJSONArray("children");
             subHtmlCode += Arrays.stream(subJsonObjects.toArray()).map((Object element) -> {
-                return rebuildHTML((JSONObject) element);
+                return htmlBuilder((JSONObject) element);
             }).collect(Collectors.joining());
         }
         String tag = jsonObject.getJSONObject("info").getString("tag").toLowerCase();
         Map<String,Object> css = jsonObject.getJSONObject("info").getJSONObject("css").getInnerMap();
         List<String> styleItems = new LinkedList<>();
         for(String key:css.keySet()){
-            styleItems.add(key+": "+css.get(key));
+            String val = (String)css.get(key);
+            if(val.contains("\"")){
+                val = val.replace("\"","\'");
+            }
+            styleItems.add(key+": "+val);
         }
+
+        //处理css
         StringJoiner styleJoiner = new StringJoiner(";");
         styleItems.forEach(item -> styleJoiner.add(item));
         String style = styleJoiner.toString();
+        StringJoiner classJoiner = new StringJoiner(" ");
         String htmlCode = "<" + tag + " style = \"" + style + "\"" + ">";
+        //String htmlCode = "<" + tag + ">";
         if(jsonObject.containsKey("content")){
             htmlCode += jsonObject.getString("content");
         }
