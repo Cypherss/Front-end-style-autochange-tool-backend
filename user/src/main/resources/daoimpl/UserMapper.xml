@@ -14,6 +14,10 @@
         insert into `group`(name,description) values (#{name},#{description})
     </insert>
 
+    <insert id="addRecord" parameterType="com.example.demo.PO.Record">
+        insert into record (userId, sourceId, targetId, time) values (#{userId},#{sourceId},#{targetId}, #{time})
+    </insert>
+
     <select id="getUser" parameterType="com.example.demo.PO.User" resultMap="User">
         select * from user where name=#{name} and password = #{password}
     </select>
@@ -48,6 +52,10 @@
         where user_file.userId = #{userId} and sourcefile.id = user_file.fileId
     </select>
 
+    <select id="getUserHistory" resultMap="Record">
+        select * from record where userId = #{userId}
+    </select>
+
     <select id="getSourceFilesByGroupId" resultMap="SourceFile">
         select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
         from sourcefile, group_file
@@ -72,5 +80,12 @@
         <result column="id" property="id"></result>
         <result column="name" property="name"></result>
         <result column="description" property="description"></result>
+    </resultMap>
+
+    <resultMap id="Record" type="com.example.demo.PO.Record">
+        <result column="userId" property="userId"></result>
+        <result column="sourceId" property="sourceId"></result>
+        <result column="targetId" property="targetId"></result>
+        <result column="time" property="time"></result>
     </resultMap>
 </mapper>

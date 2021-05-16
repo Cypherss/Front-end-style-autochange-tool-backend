@@ -1,6 +1,7 @@
 package com.example.demo.DAO;
 
 import com.example.demo.PO.Group;
+import com.example.demo.PO.Record;
 import com.example.demo.PO.SourceFile;
 import com.example.demo.PO.User;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,4 +31,6 @@ public interface UserMapper {
     public List<User> getUsersByGroupId(int groupId);
     public List<SourceFile> getSourceFilesByUserId(int userId);
     public List<SourceFile> getSourceFilesByGroupId(int groupId);
+    public int addRecord(Record record);
+    public List<Record> getUserHistory(int userId);
 }

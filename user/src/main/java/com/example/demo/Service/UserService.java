@@ -3,6 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.PO.Group;
 import com.example.demo.PO.SourceFile;
 import com.example.demo.PO.User;
+import com.example.demo.DTO.RecordDTO;
 
 import java.util.List;
 
@@ -31,5 +32,9 @@ public interface UserService {
     public List<User> getGroupUsers(int groupId);
 
     public List<SourceFile> getGroupSources(int groupId);
+
+    public boolean addRecord(int userId,String sourceId,String targetId, String time);
+
+    public List<RecordDTO> getUserHistory(int userId);
 
 }

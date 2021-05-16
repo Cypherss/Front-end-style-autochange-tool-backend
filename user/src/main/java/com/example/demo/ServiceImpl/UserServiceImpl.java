@@ -2,13 +2,16 @@ package com.example.demo.ServiceImpl;
 
 import com.example.demo.DAO.UserMapper;
 import com.example.demo.PO.Group;
+import com.example.demo.PO.Record;
 import com.example.demo.PO.SourceFile;
 import com.example.demo.PO.User;
 import com.example.demo.Service.UserService;
+import com.example.demo.DTO.RecordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,6 +70,18 @@ public class UserServiceImpl implements UserService {
     }
     public List<SourceFile> getGroupSources(int groupId) {
         return userMapper.getSourceFilesByGroupId(groupId);
+    }
+    public boolean addRecord(int userId,String sourceId,String targetId, String time){
+        return userMapper.addRecord(new Record(userId,sourceId,targetId,time))==1;
+    }
+
+    public List<RecordDTO> getUserHistory(int userId){
+        List<Record> records = userMapper.getUserHistory(userId);
+        List<RecordDTO> ans = new ArrayList<>();
+        for(Record record:records){
+            ans.add(record.getDTO());
+        }
+        return ans;
     }
 }
   

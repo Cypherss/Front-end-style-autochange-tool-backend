@@ -4,6 +4,7 @@ import com.example.demo.PO.Group;
 import com.example.demo.PO.SourceFile;
 import com.example.demo.PO.User;
 import com.example.demo.Service.UserService;
+import com.example.demo.DTO.RecordDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +128,26 @@ public class UserController {
             LOGGER.error(e.getMessage());
         }
         return null;
+    }
+
+    @RequestMapping(value = "/record", method = RequestMethod.POST)
+    public boolean addRecord(@RequestParam("userId")int userId,@RequestParam("sourceId")String sourceId,@RequestParam("targetId")String targetId,@RequestParam("time")String time){
+        try {
+            return userService.addRecord(userId,sourceId,targetId,time);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return false;
+        }
+    }
+
+    @RequestMapping(value = "/history", method = RequestMethod.GET)
+    public List<RecordDTO> getHistory(@RequestParam("userId")int userId){
+        try {
+            return userService.getUserHistory(userId);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return null;
+        }
     }
 }
   

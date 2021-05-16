@@ -1,6 +1,7 @@
 package com.example.zuul.Controller;
 
 import com.example.zuul.DTO.Group;
+import com.example.zuul.DTO.RecordDTO;
 import com.example.zuul.DTO.SourceFile;
 import com.example.zuul.VO.ResponseVO;
 import com.example.zuul.DTO.User;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * @author zcy
@@ -124,5 +127,25 @@ public class UserController {
             LOGGER.error(e.getMessage());
         }
         return ResponseVO.buildFailure("error");
+    }
+
+    @RequestMapping(value = "/record", method = RequestMethod.POST)
+    public ResponseVO addRecord(@RequestParam("userId")int userId,@RequestParam("sourceId")String sourceId,@RequestParam("targetId")String targetId,@RequestParam("time")String time){
+        try {
+            return ResponseVO.buildSuccess(restTemplate.postForObject(HEADER+"/record?userId={1}&sourceId={2}&targetId={3}&time={4}",null,Boolean.class,userId,sourceId,targetId,time));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseVO.buildFailure("error");
+        }
+    }
+
+    @RequestMapping(value = "/history", method = RequestMethod.GET)
+    public ResponseVO getHistory(@RequestParam("userId")int userId){
+        try {
+            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/history?userId={1}", RecordDTO[].class,userId));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseVO.buildFailure("error");
+        }
     }
 }
