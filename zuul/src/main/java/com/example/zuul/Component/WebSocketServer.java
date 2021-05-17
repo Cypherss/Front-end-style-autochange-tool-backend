@@ -25,6 +25,7 @@ public class WebSocketServer {
     RestTemplate restTemplate;
 
     final String CORE_HEADER = "http://core";
+    final String USER_HEADER = "http://user";
 
     /**
      * 连接建立成功调用的方法
