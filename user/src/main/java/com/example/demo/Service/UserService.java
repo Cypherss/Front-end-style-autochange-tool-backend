@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.DTO.SourceFileWithCount;
 import com.example.demo.PO.Group;
 import com.example.demo.PO.SourceFile;
 import com.example.demo.PO.User;
@@ -37,4 +38,9 @@ public interface UserService {
 
     public List<RecordDTO> getUserHistory(int userId);
 
+    public List<SourceFileWithCount> getMostUsedUserSources(int userId);
+
+    public List<SourceFileWithCount> getMostUsedUserGroupSources(int userId);
+
+    public List<SourceFile> getGroupSourceFileByUserId(int userId);
 }

@@ -1,5 +1,6 @@
 package com.example.demo.Controller;
 
+import com.example.demo.DTO.SourceFileWithCount;
 import com.example.demo.PO.Group;
 import com.example.demo.PO.SourceFile;
 import com.example.demo.PO.User;
@@ -53,6 +54,36 @@ public class UserController {
     public List<SourceFile> getSourcesByUserId(@RequestParam(value = "userId")int userId){
         try{
             return userService.getUserSources(userId);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/person/sortedsource", method = RequestMethod.GET)
+    public List<SourceFileWithCount> getMostUsedSourcesByUserId(@RequestParam(value = "userId")int userId){
+        try{
+            return userService.getMostUsedUserSources(userId);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/person/sortedgroupsource", method = RequestMethod.GET)
+    public List<SourceFileWithCount> getMostUsedGroupSourcesByUserId(@RequestParam(value = "userId")int userId){
+        try{
+            return userService.getMostUsedUserGroupSources(userId);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/user/group/source", method = RequestMethod.GET)
+    public List<SourceFile> getGroupSourcesByUserId(@RequestParam(value = "userId")int userId){
+        try{
+            return userService.getGroupSourceFileByUserId(userId);
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
@@ -149,5 +180,6 @@ public class UserController {
             return null;
         }
     }
+
 }
   

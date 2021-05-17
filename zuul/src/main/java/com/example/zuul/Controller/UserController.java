@@ -1,10 +1,7 @@
 package com.example.zuul.Controller;
 
-import com.example.zuul.DTO.Group;
-import com.example.zuul.DTO.RecordDTO;
-import com.example.zuul.DTO.SourceFile;
+import com.example.zuul.DTO.*;
 import com.example.zuul.VO.ResponseVO;
-import com.example.zuul.DTO.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * @author zcy
@@ -53,6 +48,36 @@ public class UserController {
     public ResponseVO getSourcesByUserId(@RequestParam(value = "userId")int userId){
         try {
             return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/source?userId={1}", SourceFile[].class,userId));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return ResponseVO.buildFailure("error");
+    }
+
+    @RequestMapping(value = "/person/sortedsource", method = RequestMethod.GET)
+    public ResponseVO getMostUsedSourcesByUserId(@RequestParam(value = "userId")int userId){
+        try{
+            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/sortedsource",SourceFileWithCount[].class,userId));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return ResponseVO.buildFailure("error");
+    }
+
+    @RequestMapping(value = "/person/sortedgroupsource", method = RequestMethod.GET)
+    public ResponseVO getMostUsedGroupSourcesByUserId(@RequestParam(value = "userId")int userId){
+        try{
+            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/sortedgroupsource",SourceFileWithCount[].class,userId));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return ResponseVO.buildFailure("error");
+    }
+
+    @RequestMapping(value = "/user/group/source", method = RequestMethod.GET)
+    public ResponseVO getGroupSourcesByUserId(@RequestParam(value = "userId")int userId){
+        try{
+            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/user/group/source?userId={1}", SourceFile[].class,userId));
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }

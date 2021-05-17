@@ -1,6 +1,7 @@
 package com.example.demo.ServiceImpl;
 
 import com.example.demo.DAO.UserMapper;
+import com.example.demo.DTO.SourceFileWithCount;
 import com.example.demo.PO.Group;
 import com.example.demo.PO.Record;
 import com.example.demo.PO.SourceFile;
@@ -11,12 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * @author zcy
@@ -43,6 +39,22 @@ public class UserServiceImpl implements UserService {
     }
     public List<SourceFile> getUserSources(int userId){
         return userMapper.getSourceFilesByUserId(userId);
+    }
+
+    public List<SourceFileWithCount> getMostUsedUserSources(int userId){
+        List<SourceFile> sourceFiles = userMapper.getSourceFilesByUserId(userId);
+        return getSortedSourceHelper(userId, sourceFiles);
+
+    }
+
+    public List<SourceFileWithCount> getMostUsedUserGroupSources(int userId){
+        List<SourceFile> sourceFiles = userMapper.getGroupSourceFilesByUserId(userId);
+        return getSortedSourceHelper(userId, sourceFiles);
+
+    }
+
+    public List<SourceFile> getGroupSourceFileByUserId(int userId){
+        return userMapper.getGroupSourceFilesByUserId(userId);
     }
 
     public boolean addUserSource(String fileId, int userId, String sourceName, String uploadTime, String type){
@@ -84,6 +96,34 @@ public class UserServiceImpl implements UserService {
         List<RecordDTO> ans = new ArrayList<>();
         for(Record record:records){
             ans.add(record.getDTO());
+        }
+        return ans;
+    }
+
+    public List<SourceFileWithCount> getSortedSourceHelper(int userId, List<SourceFile> sourceFiles){
+        List<RecordDTO> recordDTOS = this.getUserHistory(userId);
+        Map<String, SourceFileWithCount> map = new HashMap<>();
+        for(SourceFile sourceFile:sourceFiles){
+            map.put(sourceFile.getId(),new SourceFileWithCount(sourceFile));
+        }
+        for(RecordDTO recordDTO:recordDTOS){
+            if(!map.containsKey(recordDTO.getSourceId())){
+                continue;
+            }
+            map.get(recordDTO.getSourceId()).increaseNum();
+        }
+        PriorityQueue<SourceFileWithCount> queue = new PriorityQueue<>(new Comparator<SourceFileWithCount>() {
+            @Override
+            public int compare(SourceFileWithCount o1, SourceFileWithCount o2) {
+                return o2.getNum() - o1.getNum();
+            }
+        });
+        for(String key:map.keySet()){
+            queue.offer(map.get(key));
+        }
+        List<SourceFileWithCount> ans = new LinkedList<>();
+        while(queue.size()>0){
+            ans.add(queue.poll());
         }
         return ans;
     }

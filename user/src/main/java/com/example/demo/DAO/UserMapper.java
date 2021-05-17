@@ -30,6 +30,7 @@ public interface UserMapper {
     public List<Group> getGroupsByUserId(int userId);
     public List<User> getUsersByGroupId(int groupId);
     public List<SourceFile> getSourceFilesByUserId(int userId);
+    public List<SourceFile> getGroupSourceFilesByUserId(int userId);
     public List<SourceFile> getSourceFilesByGroupId(int groupId);
     public int addRecord(Record record);
     public List<Record> getUserHistory(int userId);

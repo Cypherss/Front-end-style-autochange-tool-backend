@@ -52,6 +52,12 @@
         where user_file.userId = #{userId} and sourcefile.id = user_file.fileId
     </select>
 
+    <select id="getGroupSourceFilesByUserId" resultMap="SourceFile">
+        select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
+        from group_file, user_group, sourcefile
+        where user_group.userId = #{userId} and user_group.groupId = group_file.groupId and group_file.fileId = sourcefile.id
+    </select>
+
     <select id="getUserHistory" resultMap="Record">
         select * from record where userId = #{userId}
     </select>
