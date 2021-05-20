@@ -1,6 +1,8 @@
 package com.example.core.Controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.core.Service.UtilService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashSet;
 
 /**
  * @author zcy
@@ -43,10 +47,14 @@ public class RepalceController {
     }
 
     @RequestMapping(value = "/html", method = RequestMethod.GET)
-    public String generateHtml(@RequestParam("fileId") String fileId){
+    public JSONObject generateHtml(@RequestParam("fileId") String fileId){
         String[] temp = fileId.split("\\.");
         String type = temp[temp.length-1];
         String json = restTemplate.getForObject(STORAGE_HEADER+"/get?objectName={1}&type={2}",String.class,fileId,type);
-        return utilService.generateHTML(json);
+        JSONObject res = new JSONObject();
+        JSONObject target = JSON.parseObject(json);
+        res.put("html",utilService.generateHTML(target,false,false,new HashSet<>()));
+        res.put("idDom",utilService.getIdDomTree(target));
+        return res;
     }
 }
