@@ -12,4 +12,5 @@ import java.util.Set;
 public interface UtilService {
     public String generateHTML(JSONObject jsonObject,boolean heightAuto, boolean widthAuto, Set<String> ids);
     public JSONObject getIdDomTree(JSONObject jsonObject);
+    public String adjustStyle(String html,String id,String attribute);
 }

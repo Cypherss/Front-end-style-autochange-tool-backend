@@ -3,6 +3,9 @@ package com.example.core.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.core.ServiceImpl.UtilServiceImpl;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.Test;
 
 import org.apache.commons.io.FileUtils;
@@ -29,6 +32,22 @@ public class UtilsServiceTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void addHtmlTest(){
+        File file = new File("src/test/resources/test.html");
+        try {
+            String content = FileUtils.readFileToString(file);
+            Document document = Jsoup.parse(content);
+            Element target = document.getElementById("divc");
+            String originStyle = target.attr("style");
+            target.removeAttr("style");
+            target.attr("style",originStyle+"width:200px;");
+            System.out.println(document.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Test

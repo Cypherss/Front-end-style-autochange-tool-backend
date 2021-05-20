@@ -3,6 +3,9 @@ package com.example.core.ServiceImpl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.core.Service.UtilService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,6 +25,23 @@ public class UtilServiceImpl implements UtilService {
 //        String htmlBody = htmlBuilder(jsonObject, false, false, new HashSet<String>());
 //        return "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlBody + "</html>";
 //    }
+
+    /**
+     * 调整页面css
+     * @param html
+     * @param id
+     * @param attribute
+     * @return
+     */
+    public String adjustStyle(String html,String id,String attribute){
+        Document document = Jsoup.parse(html);
+        Element target = document.getElementById(id);
+        String originStyle = "";
+        originStyle = target.attr("style");
+        target.removeAttr("style");
+        target.attr("style",originStyle+attribute);
+        return document.toString();
+    }
 
 
     /**
