@@ -71,10 +71,14 @@ public class WebSocketServer {
                 this.sendMessage("matchSuccess:"+fileId,session);
                 return;
             }
-            if (message.startsWith("optimize")){
-                String fileId = message.replace("optimize:","");
-                String resFileId = restTemplate.postForObject(CORE_HEADER+"/replace/optimize?targetId={1}",null,String.class,fileId);
-                this.sendMessage("optimizeSuccess:"+resFileId,session);
+            if (message.startsWith("replace")){
+                String[] fileIds = message.replace("replace:","").split("@");
+                if(fileIds.length!=2){
+                    this.sendMessage("fail",session);
+                    return;
+                }
+                String resFileId = restTemplate.postForObject(CORE_HEADER+"/replace/replace?sourceId={1}&targetId={2}",null,String.class,fileIds[0],fileIds[1]);
+                this.sendMessage("replaceSuccess:"+resFileId,session);
                 return;
             }
             if(message.startsWith("rebuild:")){

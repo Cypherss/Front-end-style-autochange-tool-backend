@@ -41,8 +41,8 @@ public class RepalceController {
         return sourceId;
     }
 
-    @RequestMapping(value = "/optimize", method = RequestMethod.POST)
-    public String match(@RequestParam("targetId") String targetId){
+    @RequestMapping(value = "/replace", method = RequestMethod.POST)
+    public String replace(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
         try {
             Thread.sleep(2000);
         }catch (Exception e){
