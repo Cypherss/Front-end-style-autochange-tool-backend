@@ -4,7 +4,7 @@ spring:
     name: zuul
 # 应用服务 WEB 访问端口
 server:
-  port: 8080
+  port: 10000
 
 eureka:
   client:
