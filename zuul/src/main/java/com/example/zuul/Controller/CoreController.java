@@ -47,12 +47,12 @@ public class CoreController {
     }
 
     @RequestMapping(value = "/source", method = RequestMethod.POST)
-    public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
+    public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("name")String name,@RequestParam("type") String type){
         try {
             String fileId = fileSave(file, type);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             String uploadTime = sdf.format(new Date())+"";
-            Boolean res = restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,file.getOriginalFilename(),uploadTime,type);
+            restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,name,uploadTime,type);
             return ResponseVO.buildSuccess(fileId);
         }catch (Exception e){
             LOGGER.error(e.getMessage());
@@ -64,7 +64,6 @@ public class CoreController {
     public ResponseVO targetUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
         try {
             String fileId = fileSave(file,type);
-            // history ???
             return ResponseVO.buildSuccess(fileId);
         }catch (Exception e){
             LOGGER.error(e.getMessage());
