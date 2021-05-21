@@ -16,6 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
 
 
 /**
@@ -32,6 +39,38 @@ public class CoreController {
 
     final String STORAGE_HEADER = "http://objectstorage/minio";
     final String USER_HEADER = "http://user/user";
+
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public ResponseVO uploadTest(HttpServletRequest request){
+        MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request)
+                .getFiles("file");
+        String name=params.getParameter("userId");
+        System.out.println("userId:"+name);
+        String id=params.getParameter("type");
+        System.out.println("type:"+id);
+        MultipartFile file = null;
+        BufferedOutputStream stream = null;
+        for (int i = 0; i < files.size(); ++i) {
+            file = files.get(i);
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    stream = new BufferedOutputStream(new FileOutputStream(
+                            new File(file.getOriginalFilename())));
+                    stream.write(bytes);
+                    stream.close();
+                } catch (Exception e) {
+                    stream = null;
+                    return ResponseVO.buildFailure("error");
+                }
+            } else {
+                return ResponseVO.buildFailure("error");
+            }
+        }
+        return ResponseVO.buildSuccess();
+
+    }
 
     @RequestMapping(value = "/source", method = RequestMethod.POST)
     public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
