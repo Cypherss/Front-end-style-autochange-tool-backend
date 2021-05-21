@@ -24,8 +24,12 @@ public class WebSocketServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketServer.class);
 
+    static RestTemplate restTemplate;
+
     @Autowired
-    RestTemplate restTemplate;
+    public void setRestTemplate(RestTemplate restTemplate){
+        WebSocketServer.restTemplate = restTemplate;
+    }
 
     final String CORE_HEADER = "http://core";
     final String USER_HEADER = "http://user";
@@ -62,6 +66,7 @@ public class WebSocketServer {
                     this.sendMessage("fail",session);
                     return;
                 }
+                System.out.println(restTemplate);
                 String fileId = restTemplate.postForObject(CORE_HEADER+"/replace/match?sourceId={1}&targetId={2}",null,String.class,fileIds[0],fileIds[1]);
                 this.sendMessage("matchSuccess:"+fileId,session);
                 return;
@@ -90,6 +95,7 @@ public class WebSocketServer {
             }
 
         }catch (Exception e){
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
             this.sendMessage("fail",session);
         }

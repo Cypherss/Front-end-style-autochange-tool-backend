@@ -51,7 +51,7 @@ public class RepalceController {
         return targetId;
     }
 
-    @RequestMapping(value = "/html", method = RequestMethod.GET)
+    @RequestMapping(value = "/html", method = RequestMethod.POST)
     public JSONObject generateHtml(@RequestParam("fileId") String fileId){
         String[] temp = fileId.split("\\.");
         String type = temp[temp.length-1];
