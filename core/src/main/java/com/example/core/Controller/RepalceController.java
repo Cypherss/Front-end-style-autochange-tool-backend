@@ -41,6 +41,16 @@ public class RepalceController {
         return sourceId;
     }
 
+    @RequestMapping(value = "/optimize", method = RequestMethod.POST)
+    public String match(@RequestParam("targetId") String targetId){
+        try {
+            Thread.sleep(2000);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return targetId;
+    }
+
     @RequestMapping(value = "/html", method = RequestMethod.GET)
     public JSONObject generateHtml(@RequestParam("fileId") String fileId){
         String[] temp = fileId.split("\\.");

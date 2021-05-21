@@ -66,6 +66,12 @@ public class WebSocketServer {
                 this.sendMessage("matchSuccess:"+fileId,session);
                 return;
             }
+            if (message.startsWith("optimize")){
+                String fileId = message.replace("optimize:","");
+                String resFileId = restTemplate.postForObject(CORE_HEADER+"/replace/optimize?targetId={1}",null,String.class,fileId);
+                this.sendMessage("optimizeSuccess:"+resFileId,session);
+                return;
+            }
             if(message.startsWith("rebuild:")){
                 String[] items = message.replace("rebuild:", "").split("@");
                 if(items.length!=3){
