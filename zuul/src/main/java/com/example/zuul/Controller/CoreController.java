@@ -39,7 +39,7 @@ public class CoreController {
             String fileId = fileSave(file, type);
             String uploadTime = fileId.split("-")[0];
             Boolean res = restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,file.getOriginalFilename(),uploadTime,type);
-            return ResponseVO.buildSuccess(res);
+            return ResponseVO.buildSuccess(fileId);
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }

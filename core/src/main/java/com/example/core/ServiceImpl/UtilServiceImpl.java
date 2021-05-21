@@ -1,9 +1,11 @@
 package com.example.core.ServiceImpl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.core.Service.UtilService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,18 +20,73 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UtilServiceImpl implements UtilService {
+//    public String generateHTML(String json){
+//        JSONObject jsonObject = JSON.parseObject(json);
+//        String htmlBody = htmlBuilder(jsonObject, false, false, new HashSet<String>());
+//        return "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlBody + "</html>";
+//    }
+
     /**
-     * 根据json组件树重建html
-     * @param json
+     * 调整页面css
+     * @param html
+     * @param id
+     * @param attribute
      * @return
      */
-    public String generateHTML(String json){
-        JSONObject jsonObject = JSON.parseObject(json);
-        String htmlBody = htmlBuilder(jsonObject, false, false);
-        return "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlBody + "</html>";
+    public String adjustStyle(String html,String id,String attribute){
+        Document document = Jsoup.parse(html);
+        Element target = document.getElementById(id);
+        String originStyle = "";
+        originStyle = target.attr("style");
+        target.removeAttr("style");
+        target.attr("style",originStyle+attribute);
+        return document.toString();
     }
 
-    public String htmlBuilder(JSONObject jsonObject,boolean heightAuto, boolean widthAuto){
+
+    /**
+     * 生成ID DOM树
+     * @param jsonObject
+     * @return
+     */
+    public JSONObject getIdDomTree(JSONObject jsonObject){
+        if(jsonObject==null){
+            return null;
+        }
+        if(!jsonObject.containsKey("info")){
+            return null;
+        }
+        JSONObject root = new JSONObject();
+        root.put("tag",jsonObject.getJSONObject("info").getString("tag"));
+        root.put("id", jsonObject.getJSONObject("info").getString("id"));
+        root.put("isLeaf", true);
+        if(jsonObject.containsKey("children")){
+            List<JSONObject> children = new ArrayList<>();
+            JSONArray subJsonObjs = jsonObject.getJSONArray("children");
+            for(int i=0;i<subJsonObjs.size();i++){
+                JSONObject sub = subJsonObjs.getJSONObject(i);
+                JSONObject subRoot = getIdDomTree(sub);
+                if (subRoot != null){
+                    children.add(subRoot);
+                }
+            }
+            if (children.size()>0){
+                root.put("isLeaf", false);
+                root.put("children",children);
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 根据json组件树重建html
+     * @param jsonObject
+     * @param heightAuto
+     * @param widthAuto
+     * @param ids
+     * @return
+     */
+    public String generateHTML(JSONObject jsonObject,boolean heightAuto, boolean widthAuto, Set<String> ids){
         if(jsonObject==null){
             return "";
         }
@@ -59,7 +116,7 @@ public class UtilServiceImpl implements UtilService {
         if(jsonObject.containsKey("children")){
             JSONArray subJsonObjects = jsonObject.getJSONArray("children");
             subHtmlCode += Arrays.stream(subJsonObjects.toArray()).map((Object element) -> {
-                return htmlBuilder((JSONObject) element, subHeightAuto, subWidthAuto);
+                return generateHTML((JSONObject) element, subHeightAuto, subWidthAuto,ids);
             }).collect(Collectors.joining());
         }
         String tag = jsonObject.getJSONObject("info").getString("tag").toLowerCase();
@@ -101,7 +158,13 @@ public class UtilServiceImpl implements UtilService {
         styleItems.forEach(item -> styleJoiner.add(item));
         String style = styleJoiner.toString();
         **/
-        String htmlCode = "<" + tag + " style = \"" + style + "\"" + ">";
+        String id = UUID.randomUUID().toString();
+        while(ids.contains(id)){
+            id = UUID.randomUUID().toString();
+        }
+        ids.add(id);
+        jsonObject.getJSONObject("info").put("id", id);
+        String htmlCode = "<" + tag + " id = \"" + id + "\" style = \"" + style + "\"" + ">";
         //String htmlCode = "<" + tag + ">";
         if(jsonObject.containsKey("content")){
             htmlCode += jsonObject.getString("content");
