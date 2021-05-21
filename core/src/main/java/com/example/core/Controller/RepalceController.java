@@ -32,23 +32,13 @@ public class RepalceController {
     RestTemplate restTemplate;
 
     @RequestMapping(value = "/match", method = RequestMethod.POST)
-    public String match(@RequestParam("fileId") String fileId){
+    public String match(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
         try {
             Thread.sleep(2000);
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
-        return fileId;
-    }
-
-    @RequestMapping(value = "/optimize", method = RequestMethod.POST)
-    public String optimize(@RequestParam("fileId") String fileId){
-        return "success";
-    }
-
-    @RequestMapping(value = "/assessment", method = RequestMethod.POST)
-    public String assessment(@RequestParam("fileId") String fileId){
-        return "success";
+        return sourceId;
     }
 
     @RequestMapping(value = "/html", method = RequestMethod.GET)
