@@ -94,12 +94,13 @@ DROP TABLE IF EXISTS `sourcefile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sourcefile` (
-  `id` varchar(45) NOT NULL,
+  `id` varchar(300) NOT NULL,
   `name` varchar(45) NOT NULL,
   `uploadTime` varchar(45) NOT NULL,
   `type` varchar(45) NOT NULL,
   `creatorId` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`(15))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -192,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-16 21:50:24
+-- Dump completed on 2021-05-21 21:31:46

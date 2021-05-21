@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author zcy
  * @version 1.0
@@ -47,7 +50,8 @@ public class CoreController {
     public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
         try {
             String fileId = fileSave(file, type);
-            String uploadTime = fileId.split("-")[0];
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String uploadTime = sdf.format(new Date())+"";
             Boolean res = restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,file.getOriginalFilename(),uploadTime,type);
             return ResponseVO.buildSuccess(fileId);
         }catch (Exception e){
