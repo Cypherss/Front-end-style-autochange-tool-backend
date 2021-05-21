@@ -33,7 +33,12 @@ public class RepalceController {
 
     @RequestMapping(value = "/match", method = RequestMethod.POST)
     public String match(@RequestParam("fileId") String fileId){
-        return "success";
+        try {
+            Thread.sleep(2000);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return fileId;
     }
 
     @RequestMapping(value = "/optimize", method = RequestMethod.POST)
