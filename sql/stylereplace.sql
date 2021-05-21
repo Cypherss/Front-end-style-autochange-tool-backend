@@ -48,7 +48,7 @@ DROP TABLE IF EXISTS `group_file`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group_file` (
   `groupId` int(11) NOT NULL,
-  `fileId` varchar(45) NOT NULL,
+  `fileId` varchar(300) NOT NULL,
   PRIMARY KEY (`groupId`,`fileId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -71,8 +71,8 @@ DROP TABLE IF EXISTS `record`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `record` (
   `userId` int(11) NOT NULL,
-  `sourceId` varchar(45) NOT NULL,
-  `targetId` varchar(45) NOT NULL,
+  `sourceId` varchar(300) NOT NULL,
+  `targetId` varchar(300) NOT NULL,
   `time` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -147,7 +147,7 @@ DROP TABLE IF EXISTS `user_file`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_file` (
   `userId` int(11) NOT NULL,
-  `fileId` varchar(45) NOT NULL,
+  `fileId` varchar(300) NOT NULL,
   PRIMARY KEY (`userId`,`fileId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -193,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-21 21:31:46
+-- Dump completed on 2021-05-21 22:29:09
