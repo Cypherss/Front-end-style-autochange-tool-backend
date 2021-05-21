@@ -54,14 +54,11 @@ public class FileController {
             // 设置存储对象名称
             String uuid = UUID.randomUUID().toString();
             String objectName = uuid + sdf.format(new Date()) + "-" + filename;
-            while(minioClient.getObject(type,objectName)!=null){
-                uuid = UUID.randomUUID().toString();
-                objectName = uuid + sdf.format(new Date()) + "-" + filename;
-            }
             // 使用putObject上传一个文件到存储桶中
             minioClient.putObject(type, objectName, file.getInputStream(), file.getContentType());
             return objectName;
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.info("上传发生错误: {}！", e.getMessage());
         }
         return "error";
