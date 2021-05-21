@@ -16,14 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-
 
 /**
  * @author zcy
@@ -39,6 +31,17 @@ public class CoreController {
 
     final String STORAGE_HEADER = "http://objectstorage/minio";
     final String USER_HEADER = "http://user/user";
+    final String CORE_HEADER = "http://core/replace";
+
+    @RequestMapping(value = "/adjust", method = RequestMethod.GET)
+    public ResponseVO adjustHtml(@RequestParam("html") String html,@RequestParam("id") String id,@RequestParam("attribute") String attribute){
+        try {
+            return ResponseVO.buildSuccess(restTemplate.getForObject(CORE_HEADER+"/adjust?html={1}&id={3}&attribute={3}",String.class,html,id,attribute));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+        }
+        return ResponseVO.buildFailure("error");
+    }
 
     @RequestMapping(value = "/source", method = RequestMethod.POST)
     public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){

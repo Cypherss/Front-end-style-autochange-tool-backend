@@ -52,4 +52,10 @@ public class RepalceController {
         res.put("idDom",utilService.getIdDomTree(target));
         return res;
     }
+
+    @RequestMapping(value = "/adjust", method = RequestMethod.GET)
+    public String adjustHtml(@RequestParam("html") String html,@RequestParam("id") String id,@RequestParam("attribute") String attribute){
+        return utilService.adjustStyle(html,id,attribute);
+    }
+
 }
