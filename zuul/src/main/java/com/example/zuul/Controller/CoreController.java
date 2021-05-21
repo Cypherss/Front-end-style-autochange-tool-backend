@@ -50,7 +50,7 @@ public class CoreController {
     public ResponseVO sourceUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("name")String name,@RequestParam("type") String type){
         try {
             String fileId = fileSave(file, type);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String uploadTime = sdf.format(new Date())+"";
             restTemplate.postForObject(USER_HEADER+"/sourceadd?fileId={1}&userId={2}&sourceName={3}&uploadTime={4}&type={5}",null,Boolean.class,fileId,userId,name,uploadTime,type);
             return ResponseVO.buildSuccess(fileId);

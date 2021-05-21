@@ -88,7 +88,7 @@ public class WebSocketServer {
                     return;
                 }
                 JSONObject res = restTemplate.postForObject(CORE_HEADER+"/replace/html?fileId={1}",null,JSONObject.class,items[1]);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 boolean insertFlag = restTemplate.postForObject(USER_HEADER+"/user/record?userId={1}&sourceId={2}&targetId={3}&time={4}",null,Boolean.class,items[2],items[0],items[1],""+sdf.format(new Date()));
                 if (insertFlag){
                     this.sendMessage("rebuildSuccess:"+JSONObject.toJSONString(res),session);

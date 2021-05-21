@@ -48,10 +48,8 @@ public class FileController {
                 minioClient.makeBucket(type);
                 minioClient.setBucketPolicy(type, "*.*", PolicyType.READ_ONLY);
             }
-            String filename = file.getOriginalFilename();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             // 设置存储对象名称
-            String objectName = sdf.format(new Date()) + "-" + filename;
+            String objectName = file.getOriginalFilename();
             // 使用putObject上传一个文件到存储桶中
             minioClient.putObject(type, objectName, file.getInputStream(), file.getContentType());
             return objectName;
