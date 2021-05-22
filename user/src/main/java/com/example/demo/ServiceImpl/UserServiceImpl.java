@@ -95,6 +95,8 @@ public class UserServiceImpl implements UserService {
         List<Record> records = userMapper.getUserHistory(userId);
         List<RecordDTO> ans = new ArrayList<>();
         for(Record record:records){
+            RecordDTO item = record.getDTO();
+            item.setSourceName(userMapper.getSourceName(item.getSourceId()));
             ans.add(record.getDTO());
         }
         return ans;

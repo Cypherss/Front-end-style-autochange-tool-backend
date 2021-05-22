@@ -70,6 +70,10 @@
         where group_file.groupId = #{groupId} and sourcefile.id = group_file.fileId
     </select>
 
+    <select id="getSourceName">
+        select sourcefile.name from sourcefile where id = #{sourceId}
+    </select>
+
     <resultMap id="User" type="com.example.demo.PO.User">
         <result column="id" property="id"></result>
         <result column="name" property="name"></result>
