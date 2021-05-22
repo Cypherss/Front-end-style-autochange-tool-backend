@@ -121,9 +121,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/group", method = RequestMethod.POST)
-    public int addGroup(@RequestParam(value = "name")String name,@RequestParam(value = "description") String description){
+    public int addGroup(@RequestParam(value = "name")String name,@RequestParam(value = "description") String description,@RequestParam("userId")int userId){
         try{
-            return userService.addGroup(name, description);
+            int groupId = userService.addGroup(name, description);
+            userService.addGroupMember(groupId, userId);
+            return groupId;
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
