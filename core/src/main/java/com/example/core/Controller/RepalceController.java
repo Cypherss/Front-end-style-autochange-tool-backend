@@ -33,23 +33,24 @@ public class RepalceController {
     RestTemplate restTemplate;
 
     @RequestMapping(value = "/match", method = RequestMethod.POST)
-    public String match(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
+    public Boolean match(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
         try {
-            Thread.sleep(2000);
+            restTemplate.getForObject(MATCHREPLACE_HEADER+"/match?fileId1={1}&fileId2={2}",null,sourceId,targetId);
+            return true;
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
-        return sourceId;
+        return false;
     }
 
     @RequestMapping(value = "/replace", method = RequestMethod.POST)
     public String replace(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
         try {
-            Thread.sleep(2000);
+            return restTemplate.getForObject(MATCHREPLACE_HEADER+"/replace",String.class);
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
-        return targetId;
+        return "";
     }
 
     @RequestMapping(value = "/html", method = RequestMethod.POST)
