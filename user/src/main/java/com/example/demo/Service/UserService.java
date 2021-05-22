@@ -24,7 +24,7 @@ public interface UserService {
 
     public boolean shareSource(int groupId, String sourceName);
 
-    public int addGroup(String name, String description);
+    public Group addGroup(String name, String description);
 
     public boolean addGroupMember(int groupId, int userId);
 

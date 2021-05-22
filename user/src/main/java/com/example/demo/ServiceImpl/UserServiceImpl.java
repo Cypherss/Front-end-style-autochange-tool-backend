@@ -68,12 +68,12 @@ public class UserServiceImpl implements UserService {
     public boolean shareSource(int groupId, String sourceName){
         return userMapper.addGroupFile(groupId, sourceName) == 1;
     }
-    public int addGroup(String name, String description){
+    public Group addGroup(String name, String description){
         Group group = new Group(name, description);
         if (userMapper.addGroup(group) == 1){
-            return group.getId();
+            return group;
         }
-        return -1;
+        return null;
     }
     public boolean addGroupMember(int groupId,int userId){
         return userMapper.addGroupMember(groupId, userId) == 1;
