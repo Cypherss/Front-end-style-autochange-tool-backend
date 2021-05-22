@@ -12,12 +12,14 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class ObjectStorageUtils {
+
     @Autowired
     RestTemplate restTemplate;
+
     final String STORAGE_HEADER = "http://objectstorage/minio";
     public String saveFile(String content){
         try {
-            return restTemplate.postForObject(STORAGE_HEADER+"/strupload?content={1}&type={2}",null,String.class,content,"json");
+                return restTemplate.postForObject(STORAGE_HEADER+"/strupload?content={1}&type={2}",null,String.class,content,"json");
         }catch (Exception e){
             e.printStackTrace();
         }
