@@ -26,6 +26,7 @@ public class RepalceController {
     private static final Logger LOGGER = LoggerFactory.getLogger(RepalceController.class);
 
     final String STORAGE_HEADER = "http://objectstorage/minio";
+    final String MATCHREPLACE_HEADER = "http://matchreplace/replaceAndMatch";
     @Autowired
     UtilService utilService;
     @Autowired
