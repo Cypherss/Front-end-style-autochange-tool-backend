@@ -17,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author zcy
@@ -39,7 +37,7 @@ public class FileController {
 
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String upload(@RequestParam("file") MultipartFile file, @RequestParam("type")String type) {
+    public String upload(@RequestParam("file") MultipartFile file, @RequestParam("type") String type) {
         try {
             //创建一个MinIO的Java客户端
             MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
@@ -64,23 +62,23 @@ public class FileController {
     }
 
     @RequestMapping(value = "/strupload", method = RequestMethod.POST)
-    public String strUpload(@RequestParam("content") String content,@RequestParam("type")String type) {
+    public String strUpload(@RequestParam("content") String content, @RequestParam("type") String type) {
         try {
-            File temp = File.createTempFile("temp","."+type);
-            FileUtils.writeStringToFile(temp,content);
+            File temp = File.createTempFile("temp", "." + type);
+            FileUtils.writeStringToFile(temp, content);
             FileItem fileItem = createFileItem(temp);
             MultipartFile tempMultipartFile = new CommonsMultipartFile(fileItem);
-            String fileId = this.upload(tempMultipartFile,type);
+            String fileId = this.upload(tempMultipartFile, type);
             temp.delete();
             return fileId;
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
         return "";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public boolean delete(@RequestParam("objectName") String objectName,@RequestParam("type") String type) {
+    public boolean delete(@RequestParam("objectName") String objectName, @RequestParam("type") String type) {
         try {
             MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
             minioClient.removeObject(type, objectName);
@@ -92,19 +90,18 @@ public class FileController {
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public String get(@RequestParam("objectName") String objectName,@RequestParam("type") String type) {
+    public String get(@RequestParam("objectName") String objectName, @RequestParam("type") String type) {
         try {
             MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
             InputStream inputStream = minioClient.getObject(type, objectName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
             StringBuffer sb = new StringBuffer();
             String str = "";
-            while ((str = br.readLine()) != null)
-            {
+            while ((str = br.readLine()) != null) {
                 sb.append(str).append("\n");
             }
             return sb.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "error";
