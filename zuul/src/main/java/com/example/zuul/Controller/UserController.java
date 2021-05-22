@@ -57,7 +57,7 @@ public class UserController {
     @RequestMapping(value = "/person/sortedsource", method = RequestMethod.GET)
     public ResponseVO getMostUsedSourcesByUserId(@RequestParam(value = "userId")int userId){
         try{
-            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/sortedsource",SourceFileWithCount[].class,userId));
+            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/sortedsource?userId={1}",SourceFileWithCount[].class,userId));
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
@@ -67,7 +67,7 @@ public class UserController {
     @RequestMapping(value = "/person/sortedgroupsource", method = RequestMethod.GET)
     public ResponseVO getMostUsedGroupSourcesByUserId(@RequestParam(value = "userId")int userId){
         try{
-            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/sortedgroupsource",SourceFileWithCount[].class,userId));
+            return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/person/sortedgroupsource?userId={1}",SourceFileWithCount[].class,userId));
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }

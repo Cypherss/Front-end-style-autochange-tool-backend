@@ -44,7 +44,7 @@ public class RepalceController {
     }
 
     @RequestMapping(value = "/replace", method = RequestMethod.POST)
-    public String replace(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
+    public String replace(){
         try {
             return restTemplate.getForObject(MATCHREPLACE_HEADER+"/replace",String.class);
         }catch (Exception e){
