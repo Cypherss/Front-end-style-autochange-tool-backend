@@ -44,7 +44,7 @@ public class MatchReplaceController {
     }
 
     @RequestMapping(value = "/replace", method = RequestMethod.GET)
-    public void replace(){
-        replacer.replace(MatchReplaceApplication.matchedBody);
+    public String replace(){
+        return replacer.replaceAndSave(MatchReplaceApplication.matchedBody);
     }
 }
