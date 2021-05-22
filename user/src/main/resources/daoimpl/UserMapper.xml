@@ -61,7 +61,7 @@
     </select>
 
     <select id="getUserHistory" resultMap="Record">
-        select * from record where userId = #{userId}
+        select * from record where userId = #{userId} order by record.time asc
     </select>
 
     <select id="getSourceFilesByGroupId" resultMap="SourceFile">
