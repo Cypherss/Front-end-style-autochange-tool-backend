@@ -77,6 +77,17 @@ public class FileController {
         return "";
     }
 
+    @RequestMapping(value = "/url", method = RequestMethod.GET)
+    public String urlGet(@RequestParam("htmlKey") String htmlKey){
+        try {
+            MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
+            return minioClient.getObjectUrl("html",htmlKey);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public boolean delete(@RequestParam("objectName") String objectName, @RequestParam("type") String type) {
         try {

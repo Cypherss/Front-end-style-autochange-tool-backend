@@ -60,7 +60,9 @@ public class RepalceController {
         String json = restTemplate.getForObject(STORAGE_HEADER+"/get?objectName={1}&type={2}",String.class,fileId,type);
         JSONObject res = new JSONObject();
         JSONObject target = JSON.parseObject(json);
-        res.put("html",utilService.generateHTML(target,false,false,new HashSet<>()));
+        String htmlCode = utilService.generateHTML(target,false,false,new HashSet<>());
+        String htmlKey = restTemplate.postForObject(STORAGE_HEADER+"/strupload?content={1}&type={2}",null,String.class,htmlCode,"html");
+        res.put("html",restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,htmlKey));
         res.put("idDom",utilService.getIdDomTree(target));
         return res;
     }
