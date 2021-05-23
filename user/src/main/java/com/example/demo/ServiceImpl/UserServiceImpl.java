@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserService {
         List<RecordDTO> ans = new ArrayList<>();
         for(Record record:records){
             RecordDTO item = record.getDTO();
-            item.setSourceName(userMapper.getSourceName(item.getSourceId()));
-            ans.add(record.getDTO());
+            item.setSourceName(userMapper.getSourceName(record.getSourceId()));
+            ans.add(item);
         }
         return ans;
     }
@@ -130,4 +130,3 @@ public class UserServiceImpl implements UserService {
         return ans;
     }
 }
-  

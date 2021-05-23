@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface Replacer {
-    public String replaceAndSave(TreeNode body);
+    public String replaceAndSave(String fileId, TreeNode body);
     public TreeNodeDTO replace(TreeNode body);
 
 }

@@ -1,9 +1,9 @@
 package com.example.matchreplace.controller;
 
-import com.example.matchreplace.Global.GlobalVariable;
 import com.example.matchreplace.MatchReplaceApplication;
 import com.example.matchreplace.bl.match.Matcher;
 import com.example.matchreplace.bl.replace.Replacer;
+import com.example.matchreplace.Global.GlobalVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,14 +41,13 @@ public class MatchReplaceController {
 
     @RequestMapping(value = "/match", method = RequestMethod.GET)
     public Boolean match(@RequestParam("fileId1") String fileId1, @RequestParam("fileId2") String fileId2){
-        System.out.println("start");
-        matcher.matchControl(fileId1, fileId2);
+        GlobalVariable.fileId = fileId2;
+        matcher.matchControl(fileId2, fileId1);
         return true;
     }
 
     @RequestMapping(value = "/replace", method = RequestMethod.GET)
     public String replace(){
-        System.out.println(GlobalVariable.matchedBody);
-        return replacer.replaceAndSave(GlobalVariable.matchedBody);
+        return replacer.replaceAndSave(GlobalVariable.fileId, GlobalVariable.matchedBody);
     }
 }

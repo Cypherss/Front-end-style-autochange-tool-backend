@@ -1,9 +1,9 @@
 package com.example.matchreplace.blImpl.match;
 
-import com.example.matchreplace.Global.GlobalVariable;
 import com.example.matchreplace.MatchReplaceApplication;
 import com.example.matchreplace.bl.match.Matcher;
 import com.example.matchreplace.bl.preprocess.Preprocessor;
+import com.example.matchreplace.Global.GlobalVariable;
 import com.example.matchreplace.vo.InternalNode;
 import com.example.matchreplace.vo.LeafNode;
 import com.example.matchreplace.vo.Size;
@@ -33,7 +33,6 @@ public class MatcherImpl implements Matcher {
 
     @Override
     public void match(TreeNode root1, TreeNode root2) {
-        System.out.println("start");
         HashMap<String, HashMap<Size, List<TreeNode>>> nodeMap1 = treeToMap(root1);
         HashMap<String, HashMap<Size, List<TreeNode>>> nodeMap2 = treeToMap(root2);
         Set<String> keysOfMap1 = nodeMap1.keySet();
@@ -49,7 +48,6 @@ public class MatcherImpl implements Matcher {
             }
         }
         GlobalVariable.matchedBody = root1;
-        System.out.println("finish");
     }
 
     /**
@@ -145,7 +143,7 @@ public class MatcherImpl implements Matcher {
                 }
             }
             //相似度过低，就跳出循环，不进行匹配
-            if(nowMaxSimilarity<0.3*maxSimilarity)
+            if(nowMaxSimilarity<0.5*maxSimilarity)
                 break;
             //已经确定最大的similarity的位置，首先进行匹配，接着将这行和这列变为不可使用，similarity设为0，进入下一轮
             nodes1.get(maxRow).setMatcher(nodes2.get(maxCol));

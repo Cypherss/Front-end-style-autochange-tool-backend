@@ -60,9 +60,9 @@ public class Record {
     }
 
     public RecordDTO getDTO(){
-        String[] temp = this.sourceId.split("-");
-        String sourceName = temp[0];
-        String targetName = "";
+        String[] temp = this.targetId.split("-");
+        String targetName = temp[0];
+        String sourceName = "";
         return new RecordDTO(this.userId,this.sourceId,this.targetId,this.time,sourceName,targetName);
     }
 }

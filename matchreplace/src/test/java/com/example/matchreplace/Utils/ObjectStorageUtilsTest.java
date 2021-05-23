@@ -20,7 +20,7 @@ public class ObjectStorageUtilsTest {
     @Test
     public void saveTest(){
         String testStr = "test str";
-        String fileId = objectStorageUtils.saveFile(testStr);
+        String fileId = objectStorageUtils.saveFile("",testStr);
         System.out.println(objectStorageUtils.getFileContetnt(fileId));
     }
 }

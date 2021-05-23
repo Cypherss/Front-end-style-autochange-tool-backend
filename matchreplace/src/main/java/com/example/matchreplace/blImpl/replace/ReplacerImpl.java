@@ -22,10 +22,10 @@ public class ReplacerImpl implements Replacer {
     ObjectStorageUtils objectStorageUtils;
 
     @Override
-    public String replaceAndSave(TreeNode body){
+    public String replaceAndSave(String fileId, TreeNode body){
         TreeNodeDTO treeNodeDTO = replace(body);
         String json = ObjectToJson(treeNodeDTO);
-        String saveId = objectStorageUtils.saveFile(json);
+        String saveId = objectStorageUtils.saveFile(fileId, json);
         return saveId;
     }
 

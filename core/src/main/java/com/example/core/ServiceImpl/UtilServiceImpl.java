@@ -114,10 +114,17 @@ public class UtilServiceImpl implements UtilService {
         }
 
         if(jsonObject.containsKey("children")){
-            JSONArray subJsonObjects = jsonObject.getJSONArray("children");
-            subHtmlCode += Arrays.stream(subJsonObjects.toArray()).map((Object element) -> {
-                return generateHTML((JSONObject) element, subHeightAuto, subWidthAuto,ids);
-            }).collect(Collectors.joining());
+            //System.out.println("out:"+jsonObject.getString("children"));
+            //System.out.println(jsonObject.getString("children")==null);
+            if(jsonObject.getString("children")!=null){
+                JSONArray subJsonObjects = jsonObject.getJSONArray("children");
+                subHtmlCode += Arrays.stream(subJsonObjects.toArray()).map((Object element) -> {
+                    if(element instanceof String){
+                        return "";
+                    }
+                    return generateHTML((JSONObject) element, subHeightAuto, subWidthAuto,ids);
+                }).collect(Collectors.joining());
+            }
         }
         String tag = jsonObject.getJSONObject("info").getString("tag").toLowerCase();
         String usedCss = jsonObject.getJSONObject("info").getString("usedCss");
@@ -143,21 +150,20 @@ public class UtilServiceImpl implements UtilService {
 
             style = optimize(style, heightAuto, widthAuto);
         }
-        /**
-        Map<String,Object> css = jsonObject.getJSONObject("info").getJSONObject("css").getInnerMap();
-        List<String> styleItems = new LinkedList<>();
-        for(String key:css.keySet()){
-            String val = (String)css.get(key);
-            if(val.contains("\"")){
-                val = val.replace("\"","\'");
-            }
-            styleItems.add(key+": "+val);
-        }
 
-        StringJoiner styleJoiner = new StringJoiner(";");
-        styleItems.forEach(item -> styleJoiner.add(item));
-        String style = styleJoiner.toString();
-        **/
+//        Map<String,Object> css = jsonObject.getJSONObject("info").getJSONObject("css").getInnerMap();
+//        List<String> styleItems = new LinkedList<>();
+//        for(String key:css.keySet()){
+//            String val = (String)css.get(key);
+//            if(val.contains("\"")){
+//                val = val.replace("\"","\'");
+//            }
+//            styleItems.add(key+": "+val);
+//        }
+//
+//        StringJoiner styleJoiner = new StringJoiner(";");
+//        styleItems.forEach(item -> styleJoiner.add(item));
+//        String style = styleJoiner.toString();
         String id = UUID.randomUUID().toString();
         while(ids.contains(id)){
             id = UUID.randomUUID().toString();

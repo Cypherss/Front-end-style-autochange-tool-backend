@@ -43,19 +43,33 @@ public class PreprocessorImpl implements Preprocessor {
     private TreeNode toTreeHelp(JsonObject jsonNode, int absoluteToTopOfParent, int absoluteToLeftOfParent){
         Gson gson = new Gson();
         Info info = gson.fromJson(jsonNode.get("info").toString(), Info.class);
+        Object css = info.getCss();
+        String cssString = gson.toJson(css);
+        if(cssString.contains("\"display\":\"none\"")){
+            System.out.println(cssString);
+            return null;
+        }
         double areaPercent = getAreaPercentFromInfo(info);
         Size size = getSizeFromArea(areaPercent);
         int nowToTop = absoluteToTopOfParent + info.getOffsetTop();
         int nowToLeft = absoluteToLeftOfParent + info.getOffsetLeft();
         double relativeToPageTop = nowToTop/this.pageHeight;
         double relativeToPageCenter = Math.abs(0.5 - nowToLeft/this.pageWidth);
-        if(jsonNode.getAsJsonArray("children")!=null||!jsonNode.getAsJsonArray("children").getClass().equals(JsonNull.class)){
-            JsonArray children = jsonNode.getAsJsonArray("children");
+        JsonArray children = null;
+        if(jsonNode.get("children")!=null) {
+            if (jsonNode.get("children").isJsonArray())
+                children = jsonNode.getAsJsonArray("children");
+        }
+        if(children!=null){
             ArrayList<TreeNode> childNodes = new ArrayList<>();
             InternalNode internalNode = new InternalNode(info,childNodes,areaPercent,size,"div",relativeToPageTop,relativeToPageCenter);
             for(int i = 0; i< children.size(); i++){
-                JsonObject child = children.get(i).getAsJsonObject();
-                childNodes.add(toTreeHelp(child,nowToTop, nowToLeft));
+                if(children.get(i).isJsonObject()) {
+                    JsonObject child = children.get(i).getAsJsonObject();
+                    TreeNode tmp = toTreeHelp(child, nowToTop, nowToLeft);
+                    if(tmp!=null)
+                        childNodes.add(tmp);
+                }
             }
             return internalNode;
         }
@@ -63,8 +77,9 @@ public class PreprocessorImpl implements Preprocessor {
             String content = "";
             if(jsonNode.get("content")!=null) {
                 content = jsonNode.get("content").toString();
-                content = content.substring(1,content.length()-1);
+                content = content.substring(1, content.length() - 1);
             }
+
             String type = jsonNode.get("type").toString();
             type = type.substring(1, type.length()-1);
             if(type.equals("null"));

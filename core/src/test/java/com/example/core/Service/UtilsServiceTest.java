@@ -22,12 +22,14 @@ import java.util.HashSet;
 public class UtilsServiceTest {
     @Test
     public void generateHtmlTest(){
-        File file = new File("src/test/resources/content3.json");
+        File file = new File("C:\\Users\\Administrator\\Desktop\\c78c0b90-bb94-11eb-9127-ab49135ca54d.json");
         try{
             String content = FileUtils.readFileToString(file);
             JSONObject jsonObject = JSON.parseObject(content);
             UtilService utilService = new UtilServiceImpl();
-            System.out.println(utilService.generateHTML(jsonObject,false,false,new HashSet<>()));
+            String htmlCode = utilService.generateHTML(jsonObject,false,false,new HashSet<>());
+            htmlCode = "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlCode+ "</html>";
+            System.out.println(htmlCode);
         }catch (Exception e){
             e.printStackTrace();
         }

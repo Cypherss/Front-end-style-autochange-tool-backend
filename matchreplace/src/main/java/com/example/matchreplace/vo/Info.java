@@ -18,6 +18,8 @@ public class Info {
 
     private String usedCss;
 
+    private Object css;
+
 
 
 
@@ -72,5 +74,13 @@ public class Info {
 
     public void setUsedCss(String usedCss) {
         this.usedCss = usedCss;
+    }
+
+    public Object getCss() {
+        return css;
+    }
+
+    public void setCss(Object css) {
+        this.css = css;
     }
 }

@@ -29,6 +29,11 @@ class UserMapperTest {
     UserMapper userMapper;
 
     @Test
+    void sourceNameTest(){
+        System.out.println(userMapper.getSourceName("3471e330-ba49-11eb-9639-935c69467859.json"));
+    }
+
+    @Test
     void addUser(){
         User user = new User("test","123");
         userMapper.addUser(user);
