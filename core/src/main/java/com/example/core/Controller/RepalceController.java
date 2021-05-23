@@ -4,31 +4,19 @@ package com.example.core.Controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.core.Service.UtilService;
-import org.apache.commons.io.FileUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+
 import java.util.HashSet;
 
 /**
@@ -59,6 +47,18 @@ public class RepalceController {
             LOGGER.error(e.getMessage());
         }
         return false;
+    }
+
+    @RequestMapping(value = "/attribute", method = RequestMethod.GET)
+    public String getAttribute(@RequestParam("fileId")String fileId,@RequestParam("tagId")String tagId){
+        try {
+            String content = restTemplate.getForObject(STORAGE_HEADER+"/get?fileId={1}&type={2}",String.class,fileId,"html");
+            Document document = Jsoup.parse(content);
+            return document.getElementById(tagId).attr("style");
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return "";
+        }
     }
 
     @RequestMapping(value = "/replace", method = RequestMethod.POST)

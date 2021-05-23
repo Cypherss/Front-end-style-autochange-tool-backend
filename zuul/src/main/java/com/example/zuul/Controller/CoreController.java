@@ -60,6 +60,16 @@ public class CoreController {
         return ResponseVO.buildFailure("error");
     }
 
+    @RequestMapping(value = "/attribute", method = RequestMethod.GET)
+    public ResponseVO getAttribute(@RequestParam("fileId")String fileId,@RequestParam("tagId")String tagId){
+        try {
+            return ResponseVO.buildSuccess(restTemplate.getForObject(CORE_HEADER+"/attribute?fileId={1}&tagId={2}",String.class,fileId,tagId));
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return ResponseVO.buildFailure("error");
+        }
+    }
+
     @RequestMapping(value = "/target", method = RequestMethod.POST)
     public ResponseVO targetUpload(@RequestParam("userId")int userId, @RequestParam("file")MultipartFile file,@RequestParam("type") String type){
         try {
