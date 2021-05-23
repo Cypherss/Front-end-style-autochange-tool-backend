@@ -3,6 +3,7 @@ package com.example.matchreplace.blImpl.match;
 import com.example.matchreplace.MatchReplaceApplication;
 import com.example.matchreplace.bl.match.Matcher;
 import com.example.matchreplace.bl.preprocess.Preprocessor;
+import com.example.matchreplace.global.GlobalVatiables;
 import com.example.matchreplace.vo.InternalNode;
 import com.example.matchreplace.vo.LeafNode;
 import com.example.matchreplace.vo.Size;
@@ -46,7 +47,7 @@ public class MatcherImpl implements Matcher {
                 }
             }
         }
-        MatchReplaceApplication.matchedBody = root1;
+        GlobalVatiables.matchedBody = root1;
     }
 
     /**

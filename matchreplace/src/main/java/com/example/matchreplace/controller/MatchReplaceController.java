@@ -3,6 +3,7 @@ package com.example.matchreplace.controller;
 import com.example.matchreplace.MatchReplaceApplication;
 import com.example.matchreplace.bl.match.Matcher;
 import com.example.matchreplace.bl.replace.Replacer;
+import com.example.matchreplace.global.GlobalVatiables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +46,6 @@ public class MatchReplaceController {
 
     @RequestMapping(value = "/replace", method = RequestMethod.GET)
     public String replace(){
-        return replacer.replaceAndSave(MatchReplaceApplication.matchedBody);
+        return replacer.replaceAndSave(GlobalVatiables.matchedBody);
     }
 }

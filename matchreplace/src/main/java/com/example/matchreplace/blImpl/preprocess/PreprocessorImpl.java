@@ -52,19 +52,29 @@ public class PreprocessorImpl implements Preprocessor {
         int nowToLeft = absoluteToLeftOfParent + info.getOffsetLeft();
         double relativeToPageTop = nowToTop/this.pageHeight;
         double relativeToPageCenter = Math.abs(0.5 - nowToLeft/this.pageWidth);
-        JsonArray children = jsonNode.getAsJsonArray("children");
+        JsonArray children = null;
+        if(jsonNode.get("children")!=null) {
+            if (jsonNode.get("children").isJsonArray())
+                children = jsonNode.getAsJsonArray("children");
+        }
         if(children!=null){
             ArrayList<TreeNode> childNodes = new ArrayList<>();
             InternalNode internalNode = new InternalNode(info,childNodes,areaPercent,size,"div",relativeToPageTop,relativeToPageCenter);
             for(int i = 0; i< children.size(); i++){
-                JsonObject child = children.get(i).getAsJsonObject();
-                childNodes.add(toTreeHelp(child,nowToTop, nowToLeft));
+                if(children.get(i).isJsonObject()) {
+                    JsonObject child = children.get(i).getAsJsonObject();
+                    childNodes.add(toTreeHelp(child, nowToTop, nowToLeft));
+                }
             }
             return internalNode;
         }
         else{
-            String content = jsonNode.get("content").toString();
-            content = content.substring(1,content.length()-1);
+            String content = "";
+            if(jsonNode.get("content")!=null) {
+                content = jsonNode.get("content").toString();
+                content = content.substring(1, content.length() - 1);
+            }
+
             String type = jsonNode.get("type").toString();
             type = type.substring(1, type.length()-1);
             if(type.equals("null"));
