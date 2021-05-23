@@ -89,10 +89,10 @@ public class WebSocketServer {
                 JSONObject res = restTemplate.postForObject(CORE_HEADER+"/replace/html?fileId={1}",null,JSONObject.class,items[1]);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = ""+sdf.format(new Date());
-                boolean insertFlag = restTemplate.postForObject(USER_HEADER+"/user/record?userId={1}&sourceId={2}&targetId={3}&time={4}",null,Boolean.class,items[2],items[0],items[1],time);
+                res.put("time",time);
+                boolean insertFlag = restTemplate.postForObject(USER_HEADER+"/user/record?userId={1}&sourceId={2}&targetId={3}&time={4}",null,Boolean.class,items[2],items[0],res.getString("targetId"),time);
                 if (insertFlag){
                     this.sendMessage("rebuildSuccess:"+JSONObject.toJSONString(res),session);
-                    this.sendMessage("replaceTime:"+time,session);
                 }else{
                     this.sendMessage("fail",session);
                 }

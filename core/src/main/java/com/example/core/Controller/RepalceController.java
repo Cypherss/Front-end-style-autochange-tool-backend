@@ -85,6 +85,7 @@ public class RepalceController {
         String htmlKey = utilService.fileSave(tempFile,"html");
         res.put("html",restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,htmlKey));
         res.put("idDom",utilService.getIdDomTree(target));
+        res.put("targetId",htmlKey);
         return res;
     }
 
