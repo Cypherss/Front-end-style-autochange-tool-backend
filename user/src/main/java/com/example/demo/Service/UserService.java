@@ -43,4 +43,6 @@ public interface UserService {
     public List<SourceFileWithCount> getMostUsedUserGroupSources(int userId);
 
     public List<SourceFile> getGroupSourceFileByUserId(int userId);
+
+    public boolean updateRecord(String targetId, String time);
 }

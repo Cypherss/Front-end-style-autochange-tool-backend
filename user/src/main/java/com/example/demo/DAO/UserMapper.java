@@ -35,4 +35,5 @@ public interface UserMapper {
     public int addRecord(Record record);
     public List<Record> getUserHistory(int userId);
     public String getSourceName(String sourceId);
+    public int updateRecordTarget(String targetId, String time);
 }

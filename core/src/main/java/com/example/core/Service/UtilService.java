@@ -1,6 +1,7 @@
 package com.example.core.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -12,5 +13,7 @@ import java.util.Set;
 public interface UtilService {
     public String generateHTML(JSONObject jsonObject,boolean heightAuto, boolean widthAuto, Set<String> ids);
     public JSONObject getIdDomTree(JSONObject jsonObject);
-    public String adjustStyle(String html,String id,String attribute);
+    public MultipartFile fileTransfer(String fileName, String content, String type);
+    public String fileSave(MultipartFile file,String type);
+    public String adjustStyle(String fileId,String id,String attribute,String time);
 }

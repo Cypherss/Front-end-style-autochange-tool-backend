@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/stylereplace?serverTimezone=CTT&characterEncoding=UTF-8&interactiveClient=true&autoReconnect=true&useSSL=false
     username: root
-    password: Nju83269595
+    password: zcy1998917
     driver-class-name: com.mysql.cj.jdbc.Driver
     max-active: 200
     max-idle: 20

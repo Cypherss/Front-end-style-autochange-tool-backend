@@ -37,9 +37,9 @@ public class CoreController {
     final String CORE_HEADER = "http://core/replace";
 
     @RequestMapping(value = "/adjust", method = RequestMethod.GET)
-    public ResponseVO adjustHtml(@RequestParam("html") String html,@RequestParam("id") String id,@RequestParam("attribute") String attribute){
+    public ResponseVO adjustHtml(@RequestParam("fileId") String fileId,@RequestParam("id") String id,@RequestParam("attribute") String attribute){
         try {
-            return ResponseVO.buildSuccess(restTemplate.getForObject(CORE_HEADER+"/adjust?html={1}&id={3}&attribute={3}",String.class,html,id,attribute));
+            return ResponseVO.buildSuccess(restTemplate.getForObject(CORE_HEADER+"/adjust?fileId={1}&id={3}&attribute={3}",String.class,fileId,id,attribute));
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }
@@ -102,11 +102,9 @@ public class CoreController {
         return "error";
     }
 
-    @RequestMapping(value = "/content", method = RequestMethod.GET)
+    @RequestMapping(value = "/url", method = RequestMethod.GET)
     public ResponseVO getFile(@RequestParam("fileId") String fileId){
         try {
-            String[] temp = fileId.split("\\.");
-            String type = temp[temp.length-1];
             return ResponseVO.buildSuccess(restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,fileId));
         }catch (Exception e){
             LOGGER.error(e.getMessage());

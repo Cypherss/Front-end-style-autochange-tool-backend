@@ -1,18 +1,18 @@
 package com.example.demo.ServiceImpl;
 
-import com.example.demo.DAO.UserMapper;
-import com.example.demo.DTO.SourceFileWithCount;
-import com.example.demo.PO.Group;
-import com.example.demo.PO.Record;
-import com.example.demo.PO.SourceFile;
-import com.example.demo.PO.User;
-import com.example.demo.Service.UserService;
-import com.example.demo.DTO.RecordDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+        import com.example.demo.DAO.UserMapper;
+        import com.example.demo.DTO.SourceFileWithCount;
+        import com.example.demo.PO.Group;
+        import com.example.demo.PO.Record;
+        import com.example.demo.PO.SourceFile;
+        import com.example.demo.PO.User;
+        import com.example.demo.Service.UserService;
+        import com.example.demo.DTO.RecordDTO;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Service;
 
 
-import java.util.*;
+        import java.util.*;
 
 /**
  * @author zcy
@@ -128,5 +128,9 @@ public class UserServiceImpl implements UserService {
             ans.add(queue.poll());
         }
         return ans;
+    }
+
+    public boolean updateRecord(String targetId, String time){
+        return userMapper.updateRecordTarget(targetId,time) == 1;
     }
 }

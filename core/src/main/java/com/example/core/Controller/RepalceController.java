@@ -81,80 +81,18 @@ public class RepalceController {
         String htmlCode = utilService.generateHTML(target,false,false,new HashSet<>());
         htmlCode = "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlCode + "</html>";
         String fileName = fileId.split("-")[0];
-        MultipartFile tempFile = fileTransfer(fileName,htmlCode,"html");
-        String htmlKey = fileSave(tempFile,"html");
+        MultipartFile tempFile = utilService.fileTransfer(fileName,htmlCode,"html");
+        String htmlKey = utilService.fileSave(tempFile,"html");
         res.put("html",restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,htmlKey));
         res.put("idDom",utilService.getIdDomTree(target));
         return res;
     }
 
-    public MultipartFile fileTransfer(String fileName,String content,String type){
-        try {
-            File temp = File.createTempFile(fileName+"-", "." + type);
-            FileUtils.writeStringToFile(temp, content);
-            FileItem fileItem = createFileItem(temp);
-            MultipartFile tempMultipartFile = new CommonsMultipartFile(fileItem);
-            temp.deleteOnExit();
-            return tempMultipartFile;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-    private static FileItem createFileItem(File file) {
-        FileItemFactory factory = new DiskFileItemFactory(16, null);
-        FileItem item = factory.createItem("textField", "text/plain", true, file.getName());
-        int bytesRead = 0;
-        byte[] buffer = new byte[8192];
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            OutputStream os = item.getOutputStream();
-            while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-            os.close();
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return item;
-    }
-
-    public String fileSave(MultipartFile file,String type){
-        try {
-            //设置请求头
-            HttpHeaders headers = new HttpHeaders();
-            MediaType paramType = MediaType.parseMediaType("multipart/form-data");
-            headers.setContentType(paramType);
-
-            //转换文件
-            ByteArrayResource byteArrayResource = new ByteArrayResource(file.getBytes()) {
-                @Override
-                public String getFilename() {
-                    return file.getOriginalFilename();
-                }
-            };
-
-            //设置请求体，注意是LinkedMultiValueMap
-            MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
-            form.add("file", byteArrayResource);
-            form.add("type",type);
-
-            //用HttpEntity封装整个请求报文
-            HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
-
-            String fileId = restTemplate.postForObject(STORAGE_HEADER+"/upload", files, String.class);
-            return fileId;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return "error";
-    }
 
     @RequestMapping(value = "/adjust", method = RequestMethod.GET)
-    public String adjustHtml(@RequestParam("html") String html,@RequestParam("id") String id,@RequestParam("attribute") String attribute){
-        return utilService.adjustStyle(html,id,attribute);
+    public String adjustHtml(@RequestParam("fileId") String fileId,@RequestParam("id") String id,@RequestParam("attribute") String attribute,@RequestParam("time")String time){
+        return utilService.adjustStyle(fileId,id,attribute,time);
     }
 
 }

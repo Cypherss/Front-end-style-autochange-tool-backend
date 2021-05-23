@@ -3,11 +3,29 @@ package com.example.core.ServiceImpl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.core.Service.UtilService;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,27 +38,28 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UtilServiceImpl implements UtilService {
-//    public String generateHTML(String json){
-//        JSONObject jsonObject = JSON.parseObject(json);
-//        String htmlBody = htmlBuilder(jsonObject, false, false, new HashSet<String>());
-//        return "<!DOCTYPE html><head><meta charset=\"utf-8\"></head>" + htmlBody + "</html>";
-//    }
+    @Autowired
+    RestTemplate restTemplate;
 
+    final String STORAGE_HEADER = "http://objectstorage/minio";
+    final String USER_HEADER = "http://user/user";
     /**
      * 调整页面css
-     * @param html
+     * @param fileId
      * @param id
      * @param attribute
      * @return
      */
-    public String adjustStyle(String html,String id,String attribute){
+    public String adjustStyle(String fileId,String id,String attribute,String time){
+        String html = restTemplate.getForObject(STORAGE_HEADER+"/get?objectName={1}&type={2}",String.class,fileId,"html");
         Document document = Jsoup.parse(html);
         Element target = document.getElementById(id);
-        String originStyle = "";
-        originStyle = target.attr("style");
         target.removeAttr("style");
-        target.attr("style",originStyle+attribute);
-        return document.toString();
+        target.attr("style",attribute);
+        MultipartFile tempFile = fileTransfer(fileId.split("-")[0],document.toString(),"html");
+        String newFileID = fileSave(tempFile,"html");
+        restTemplate.postForObject(USER_HEADER+"/record/update?targetId={1}&time={2}",null,Boolean.class,newFileID,time);
+        return restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,newFileID);
     }
 
 
@@ -198,5 +217,69 @@ public class UtilServiceImpl implements UtilService {
             style += "width:auto;";
         }
         return style;
+    }
+
+    public MultipartFile fileTransfer(String fileName, String content, String type){
+        try {
+            File temp = File.createTempFile(fileName+"-", "." + type);
+            FileUtils.writeStringToFile(temp, content);
+            FileItem fileItem = createFileItem(temp);
+            MultipartFile tempMultipartFile = new CommonsMultipartFile(fileItem);
+            temp.deleteOnExit();
+            return tempMultipartFile;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static FileItem createFileItem(File file) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        FileItem item = factory.createItem("textField", "text/plain", true, file.getName());
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            OutputStream os = item.getOutputStream();
+            while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return item;
+    }
+
+    public String fileSave(MultipartFile file,String type){
+        try {
+            //设置请求头
+            HttpHeaders headers = new HttpHeaders();
+            MediaType paramType = MediaType.parseMediaType("multipart/form-data");
+            headers.setContentType(paramType);
+
+            //转换文件
+            ByteArrayResource byteArrayResource = new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename();
+                }
+            };
+
+            //设置请求体，注意是LinkedMultiValueMap
+            MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+            form.add("file", byteArrayResource);
+            form.add("type",type);
+
+            //用HttpEntity封装整个请求报文
+            HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
+
+            String fileId = restTemplate.postForObject(STORAGE_HEADER+"/upload", files, String.class);
+            return fileId;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "error";
     }
 }

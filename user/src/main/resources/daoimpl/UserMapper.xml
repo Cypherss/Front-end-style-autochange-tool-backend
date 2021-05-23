@@ -74,6 +74,10 @@
         select sourcefile.name from sourcefile where id = #{sourceId}
     </select>
 
+    <update id="updateRecordTarget">
+        update record set targetId = #{targetId} where time = #{time}
+    </update>
+
     <resultMap id="User" type="com.example.demo.PO.User">
         <result column="id" property="id"></result>
         <result column="name" property="name"></result>

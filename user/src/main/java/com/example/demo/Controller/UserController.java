@@ -183,4 +183,14 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/record/update", method = RequestMethod.POST)
+    public boolean updateRecord(@RequestParam("targetId") String targetId, @RequestParam("time")String time){
+        try {
+            return userService.updateRecord(targetId, time);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return false;
+        }
+    }
+
 }
