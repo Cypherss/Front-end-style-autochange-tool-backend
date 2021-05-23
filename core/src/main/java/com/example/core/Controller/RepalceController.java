@@ -35,8 +35,10 @@ public class RepalceController {
     @RequestMapping(value = "/match", method = RequestMethod.POST)
     public Boolean match(@RequestParam("sourceId") String sourceId,@RequestParam("targetId") String targetId){
         try {
-            restTemplate.getForObject(MATCHREPLACE_HEADER+"/match?fileId1={1}&fileId2={2}",null,sourceId,targetId);
-            return true;
+            if(restTemplate.getForObject(MATCHREPLACE_HEADER+"/match?fileId1={1}&fileId2={2}",Boolean.class,sourceId,targetId)){
+                return true;
+            }
+            return false;
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }

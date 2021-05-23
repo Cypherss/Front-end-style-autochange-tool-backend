@@ -1,5 +1,6 @@
 package com.example.matchreplace.blImpl.match;
 
+import com.example.matchreplace.Global.GlobalVariable;
 import com.example.matchreplace.MatchReplaceApplication;
 import com.example.matchreplace.bl.match.Matcher;
 import com.example.matchreplace.bl.preprocess.Preprocessor;
@@ -32,6 +33,7 @@ public class MatcherImpl implements Matcher {
 
     @Override
     public void match(TreeNode root1, TreeNode root2) {
+        System.out.println("start");
         HashMap<String, HashMap<Size, List<TreeNode>>> nodeMap1 = treeToMap(root1);
         HashMap<String, HashMap<Size, List<TreeNode>>> nodeMap2 = treeToMap(root2);
         Set<String> keysOfMap1 = nodeMap1.keySet();
@@ -46,7 +48,8 @@ public class MatcherImpl implements Matcher {
                 }
             }
         }
-        MatchReplaceApplication.matchedBody = root1;
+        GlobalVariable.matchedBody = root1;
+        System.out.println("finish");
     }
 
     /**

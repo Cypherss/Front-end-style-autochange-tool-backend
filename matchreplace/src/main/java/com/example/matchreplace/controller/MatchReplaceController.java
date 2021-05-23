@@ -1,5 +1,6 @@
 package com.example.matchreplace.controller;
 
+import com.example.matchreplace.Global.GlobalVariable;
 import com.example.matchreplace.MatchReplaceApplication;
 import com.example.matchreplace.bl.match.Matcher;
 import com.example.matchreplace.bl.replace.Replacer;
@@ -39,12 +40,15 @@ public class MatchReplaceController {
     Replacer replacer;
 
     @RequestMapping(value = "/match", method = RequestMethod.GET)
-    public void match(@RequestParam("fileId1") String fileId1, @RequestParam("fileId2") String fileId2){
+    public Boolean match(@RequestParam("fileId1") String fileId1, @RequestParam("fileId2") String fileId2){
+        System.out.println("start");
         matcher.matchControl(fileId1, fileId2);
+        return true;
     }
 
     @RequestMapping(value = "/replace", method = RequestMethod.GET)
     public String replace(){
-        return replacer.replaceAndSave(MatchReplaceApplication.matchedBody);
+        System.out.println(GlobalVariable.matchedBody);
+        return replacer.replaceAndSave(GlobalVariable.matchedBody);
     }
 }

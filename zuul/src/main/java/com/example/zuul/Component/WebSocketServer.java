@@ -68,7 +68,10 @@ public class WebSocketServer {
                 }
                 System.out.println(restTemplate);
                 boolean res = restTemplate.postForObject(CORE_HEADER+"/replace/match?sourceId={1}&targetId={2}",null,Boolean.class,fileIds[0],fileIds[1]);
-                this.sendMessage("matchSuccess",session);
+                if(res){
+                    this.sendMessage("matchSuccess",session);
+                }
+                this.sendMessage("fail",session);
                 return;
             }
             if (message.startsWith("replace")){

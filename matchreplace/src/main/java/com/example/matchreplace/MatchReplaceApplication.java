@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 public class MatchReplaceApplication {
 
-    public static TreeNode matchedBody;
 
     public static void main(String[] args) {
         SpringApplication.run(MatchReplaceApplication.class, args);

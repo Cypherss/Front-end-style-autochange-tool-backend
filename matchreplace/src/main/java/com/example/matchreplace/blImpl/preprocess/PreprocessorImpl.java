@@ -4,10 +4,7 @@ package com.example.matchreplace.blImpl.preprocess;
 import com.example.matchreplace.Utils.ObjectStorageUtils;
 import com.example.matchreplace.bl.preprocess.Preprocessor;
 import com.example.matchreplace.vo.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,8 +49,8 @@ public class PreprocessorImpl implements Preprocessor {
         int nowToLeft = absoluteToLeftOfParent + info.getOffsetLeft();
         double relativeToPageTop = nowToTop/this.pageHeight;
         double relativeToPageCenter = Math.abs(0.5 - nowToLeft/this.pageWidth);
-        JsonArray children = jsonNode.getAsJsonArray("children");
-        if(children!=null){
+        if(jsonNode.getAsJsonArray("children")!=null||!jsonNode.getAsJsonArray("children").getClass().equals(JsonNull.class)){
+            JsonArray children = jsonNode.getAsJsonArray("children");
             ArrayList<TreeNode> childNodes = new ArrayList<>();
             InternalNode internalNode = new InternalNode(info,childNodes,areaPercent,size,"div",relativeToPageTop,relativeToPageCenter);
             for(int i = 0; i< children.size(); i++){
@@ -63,8 +60,11 @@ public class PreprocessorImpl implements Preprocessor {
             return internalNode;
         }
         else{
-            String content = jsonNode.get("content").toString();
-            content = content.substring(1,content.length()-1);
+            String content = "";
+            if(jsonNode.get("content")!=null) {
+                content = jsonNode.get("content").toString();
+                content = content.substring(1,content.length()-1);
+            }
             String type = jsonNode.get("type").toString();
             type = type.substring(1, type.length()-1);
             if(type.equals("null"));

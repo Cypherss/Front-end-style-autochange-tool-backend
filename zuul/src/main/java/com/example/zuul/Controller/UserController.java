@@ -139,6 +139,7 @@ public class UserController {
         try {
             return ResponseVO.buildSuccess(restTemplate.getForObject(HEADER+"/usergroups?userId={1}", Group[].class,userId));
         }catch (Exception e){
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
         }
         return ResponseVO.buildFailure("error");

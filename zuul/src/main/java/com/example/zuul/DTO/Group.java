@@ -12,14 +12,14 @@ public class Group {
 
     public Group(){}
 
-    public Group(int id, String groupName, String description) {
+    public Group(int id, String name, String description) {
         this.id = id;
-        this.name = groupName;
+        this.name = name;
         this.description = description;
     }
 
-    public Group(String groupName, String description) {
-        this.name = groupName;
+    public Group(String name, String description) {
+        this.name = name;
         this.description = description;
     }
 
@@ -31,19 +31,19 @@ public class Group {
         this.id = id;
     }
 
-    public String getGroupName() {
+    public String getName() {
         return name;
     }
 
-    public void setGroupName(String groupName) {
-        this.name = groupName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDesction() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDesction(String desction) {
-        this.description = desction;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
