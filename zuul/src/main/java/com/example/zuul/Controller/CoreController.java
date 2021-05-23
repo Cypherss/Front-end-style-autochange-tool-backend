@@ -36,10 +36,10 @@ public class CoreController {
     final String USER_HEADER = "http://user/user";
     final String CORE_HEADER = "http://core/replace";
 
-    @RequestMapping(value = "/adjust", method = RequestMethod.GET)
-    public ResponseVO adjustHtml(@RequestParam("fileId") String fileId,@RequestParam("id") String id,@RequestParam("attribute") String attribute){
+    @RequestMapping(value = "/adjust", method = RequestMethod.POST)
+    public ResponseVO adjustHtml(@RequestParam("fileId") String fileId,@RequestParam("id") String id,@RequestParam("attribute") String attribute,@RequestParam("time")String time){
         try {
-            return ResponseVO.buildSuccess(restTemplate.getForObject(CORE_HEADER+"/adjust?fileId={1}&id={3}&attribute={3}",String.class,fileId,id,attribute));
+            return ResponseVO.buildSuccess(restTemplate.postForObject(CORE_HEADER+"/adjust?fileId={1}&id={3}&attribute={3}&time={4}",null,String.class,fileId,id,attribute,time));
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }

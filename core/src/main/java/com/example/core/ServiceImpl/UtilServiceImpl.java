@@ -59,7 +59,7 @@ public class UtilServiceImpl implements UtilService {
         MultipartFile tempFile = fileTransfer(fileId.split("-")[0],document.toString(),"html");
         String newFileID = fileSave(tempFile,"html");
         restTemplate.postForObject(USER_HEADER+"/record/update?targetId={1}&time={2}",null,Boolean.class,newFileID,time);
-        return restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,newFileID);
+        return newFileID;
     }
 
 

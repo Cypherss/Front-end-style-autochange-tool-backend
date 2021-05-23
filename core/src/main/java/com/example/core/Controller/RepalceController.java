@@ -52,7 +52,7 @@ public class RepalceController {
     @RequestMapping(value = "/attribute", method = RequestMethod.GET)
     public String getAttribute(@RequestParam("fileId")String fileId,@RequestParam("tagId")String tagId){
         try {
-            String content = restTemplate.getForObject(STORAGE_HEADER+"/get?fileId={1}&type={2}",String.class,fileId,"html");
+            String content = restTemplate.getForObject(STORAGE_HEADER+"/get?objectName={1}&type={2}",String.class,fileId,"html");
             Document document = Jsoup.parse(content);
             return document.getElementById(tagId).attr("style");
         }catch (Exception e){
@@ -91,7 +91,7 @@ public class RepalceController {
 
 
 
-    @RequestMapping(value = "/adjust", method = RequestMethod.GET)
+    @RequestMapping(value = "/adjust", method = RequestMethod.POST)
     public String adjustHtml(@RequestParam("fileId") String fileId,@RequestParam("id") String id,@RequestParam("attribute") String attribute,@RequestParam("time")String time){
         return utilService.adjustStyle(fileId,id,attribute,time);
     }
