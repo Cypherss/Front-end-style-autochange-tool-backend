@@ -68,12 +68,12 @@ public class UserServiceImpl implements UserService {
     public boolean shareSource(int groupId, String sourceName){
         return userMapper.addGroupFile(groupId, sourceName) == 1;
     }
-    public int addGroup(String name, String description){
+    public Group addGroup(String name, String description){
         Group group = new Group(name, description);
         if (userMapper.addGroup(group) == 1){
-            return group.getId();
+            return group;
         }
-        return -1;
+        return null;
     }
     public boolean addGroupMember(int groupId,int userId){
         return userMapper.addGroupMember(groupId, userId) == 1;
@@ -95,6 +95,8 @@ public class UserServiceImpl implements UserService {
         List<Record> records = userMapper.getUserHistory(userId);
         List<RecordDTO> ans = new ArrayList<>();
         for(Record record:records){
+            RecordDTO item = record.getDTO();
+            item.setSourceName(userMapper.getSourceName(item.getSourceId()));
             ans.add(record.getDTO());
         }
         return ans;

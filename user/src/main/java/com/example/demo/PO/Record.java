@@ -61,9 +61,8 @@ public class Record {
 
     public RecordDTO getDTO(){
         String[] temp = this.sourceId.split("-");
-        String sourceName = temp[temp.length-1];
-        temp = this.targetId.split("-");
-        String targetName = temp[temp.length-1];
+        String sourceName = temp[0];
+        String targetName = "";
         return new RecordDTO(this.userId,this.sourceId,this.targetId,this.time,sourceName,targetName);
     }
 }

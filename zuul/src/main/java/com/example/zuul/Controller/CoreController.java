@@ -107,7 +107,7 @@ public class CoreController {
         try {
             String[] temp = fileId.split("\\.");
             String type = temp[temp.length-1];
-            return ResponseVO.buildSuccess(restTemplate.getForObject(STORAGE_HEADER+"/get?objectName={1}&type={2}",String.class,fileId,type));
+            return ResponseVO.buildSuccess(restTemplate.getForObject(STORAGE_HEADER+"/url?htmlKey={1}",String.class,fileId));
         }catch (Exception e){
             LOGGER.error(e.getMessage());
         }

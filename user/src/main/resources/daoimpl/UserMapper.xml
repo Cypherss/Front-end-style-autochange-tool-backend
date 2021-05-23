@@ -50,22 +50,28 @@
         select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
         from sourcefile, user_file
         where user_file.userId = #{userId} and sourcefile.id = user_file.fileId
+        ORDER BY uploadTime ASC
     </select>
 
     <select id="getGroupSourceFilesByUserId" resultMap="SourceFile">
         select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
         from group_file, user_group, sourcefile
         where user_group.userId = #{userId} and user_group.groupId = group_file.groupId and group_file.fileId = sourcefile.id
+        ORDER BY uploadTime ASC
     </select>
 
     <select id="getUserHistory" resultMap="Record">
-        select * from record where userId = #{userId}
+        select * from record where userId = #{userId} order by record.time asc
     </select>
 
     <select id="getSourceFilesByGroupId" resultMap="SourceFile">
         select sourcefile.id id,sourcefile.name name,sourcefile.uploadTime uploadTime,sourcefile.type type,sourcefile.creatorId creatorId
         from sourcefile, group_file
         where group_file.groupId = #{groupId} and sourcefile.id = group_file.fileId
+    </select>
+
+    <select id="getSourceName">
+        select sourcefile.name from sourcefile where id = #{sourceId}
     </select>
 
     <resultMap id="User" type="com.example.demo.PO.User">

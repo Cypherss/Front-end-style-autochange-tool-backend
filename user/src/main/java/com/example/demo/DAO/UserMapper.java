@@ -34,4 +34,5 @@ public interface UserMapper {
     public List<SourceFile> getSourceFilesByGroupId(int groupId);
     public int addRecord(Record record);
     public List<Record> getUserHistory(int userId);
+    public String getSourceName(String sourceId);
 }

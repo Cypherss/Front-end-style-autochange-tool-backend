@@ -60,28 +60,23 @@ public class WebSocketServer {
     public void onMessage(String message, Session session) {
         LOGGER.info("服务端收到客户端[{}]的消息:{}", session.getId(), message);
         try {
-            if (message.startsWith("match:")){
+            if (message.startsWith("match")){
                 String[] fileIds = message.replace("match:","").split("@");
                 if(fileIds.length!=2){
                     this.sendMessage("fail",session);
                     return;
                 }
                 System.out.println(restTemplate);
-                String fileId = restTemplate.postForObject(CORE_HEADER+"/replace/match?sourceId={1}&targetId={2}",null,String.class,fileIds[0],fileIds[1]);
-                this.sendMessage("matchSuccess:"+fileId,session);
+                boolean res = restTemplate.postForObject(CORE_HEADER+"/replace/match?sourceId={1}&targetId={2}",null,Boolean.class,fileIds[0],fileIds[1]);
+                this.sendMessage("matchSuccess",session);
                 return;
             }
             if (message.startsWith("replace")){
-                String[] fileIds = message.replace("replace:","").split("@");
-                if(fileIds.length!=2){
-                    this.sendMessage("fail",session);
-                    return;
-                }
-                String resFileId = restTemplate.postForObject(CORE_HEADER+"/replace/replace?sourceId={1}&targetId={2}",null,String.class,fileIds[0],fileIds[1]);
+                String resFileId = restTemplate.postForObject(CORE_HEADER+"/replace/replace",null,String.class);
                 this.sendMessage("replaceSuccess:"+resFileId,session);
                 return;
             }
-            if(message.startsWith("rebuild:")){
+            if(message.startsWith("rebuild")){
                 String[] items = message.replace("rebuild:", "").split("@");
                 if(items.length!=3){
                     this.sendMessage("fail",session);
